@@ -3,10 +3,11 @@ FROM alpine:edge
 MAINTAINER HoaDX "duongxuanhoa@gmail.com"
 
 # Default to UTF-8 file.encoding
-ENV LANG C.UTF-8
-ENV PHPSTORM_VERSION 2017.2.4
+ENV LANG=C.UTF-8
+ENV PHPSTORM_VERSION=2017.2.4
 
-RUN apk add --no-cache openjdk8-jre openssl
+RUN apk add --no-cache openjdk8 openssl \
+    && rm -rf /tmp/* /var/cache/apk/*
 
 RUN adduser -D -u 5353 www \
     && mkdir /home/www/.PhpStorm2017.2 \
