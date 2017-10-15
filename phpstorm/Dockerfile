@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y software-properties-common python-softw
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/*
 
-RUN useradd -u 5353 www \
+RUN useradd -m -u 5353 www \
     && mkdir /home/www/.PhpStorm2017.2 \
     && touch /home/www/.PhpStorm2017.2/.keep \
     && chown -R www:www /home/www \
