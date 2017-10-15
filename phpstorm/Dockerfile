@@ -12,7 +12,7 @@ RUN apk add --no-cache openjdk8 openssl \
 RUN adduser -D -u 5353 www \
     && mkdir /home/www/.PhpStorm2017.2 \
     && touch /home/www/.PhpStorm2017.2/.keep \
-    && chown -R www.www /home/www \
+    && chown -R www:www /home/www \
     && mkdir -p /opt/phpstorm \
     && wget -O - https://download-cf.jetbrains.com/webide/PhpStorm-${PHPSTORM_VERSION}.tar.gz | tar xzf - --strip-components=1 -C "/opt/phpstorm"
 
