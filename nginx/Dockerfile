@@ -52,6 +52,8 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 	" \
 	&& addgroup -g 5353 -S www \
 	&& adduser -D -S -u 5353 -h /home/www -s /bin/sh -G www www \
+        && mkdir -p /var/cache/nginx
+        && chown -Rf www:www /var/cache/nginx
 	&& apk add --no-cache --virtual .build-deps \
 		gcc \
 		libc-dev \
