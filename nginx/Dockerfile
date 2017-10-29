@@ -4,6 +4,11 @@ LABEL maintainer="HoaDX <duongxuanhoa@gmail.com>"
 
 ENV NGINX_VERSION 1.13.6
 
+# Add user and group
+RUN adduser -D -u 5353 -g www www \
+    && mkdir -p /var/cache/nginx \
+    && chown -Rf www:www /var/cache/nginx
+
 RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 	&& CONFIG="\
 		--prefix=/etc/nginx \
@@ -50,10 +55,6 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 		--with-file-aio \
 		--with-http_v2_module \
 	" \
-	&& addgroup -g 5353 -S www \
-	&& adduser -D -S -u 5353 -h /home/www -s /bin/sh -G www www \
-        && mkdir -p /var/cache/nginx \
-        && chown -Rf www:www /var/cache/nginx \
 	&& apk add --no-cache --virtual .build-deps \
 		gcc \
 		libc-dev \
@@ -136,6 +137,9 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY nginx.vh.default.conf /etc/nginx/conf.d/default.conf
+COPY docker-entrypoint.sh /usr/local/bin/
+
+ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 80 443
 
