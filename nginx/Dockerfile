@@ -2,12 +2,16 @@ FROM alpine:3.6
 
 LABEL maintainer="HoaDX <duongxuanhoa@gmail.com>"
 
-ENV NGINX_VERSION 1.13.6
+ENV NGINX_VERSION=1.13.6
+ENV USERNAME=www
+ENV GROUPNAME=www
+ENV USER_ID=5353
+
 
 # Add user and group
-RUN adduser -D -u 5353 -g www www \
+RUN adduser -D -u $USER_ID -g $GROUPNAME $USERNAME \
     && mkdir -p /var/cache/nginx \
-    && chown -Rf www:www /var/cache/nginx
+    && chown -Rf $USERNAME:$GROUPNAME /var/cache/nginx
 
 RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 	&& CONFIG="\
@@ -24,8 +28,8 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 		--http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp \
 		--http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp \
 		--http-scgi-temp-path=/var/cache/nginx/scgi_temp \
-		--user=www \
-		--group=www \
+		--user=$USERNAME \
+		--group=$GROUPNAME \
 		--with-http_ssl_module \
 		--with-http_realip_module \
 		--with-http_addition_module \
