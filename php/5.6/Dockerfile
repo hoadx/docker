@@ -50,7 +50,7 @@ RUN apk add --no-cache --virtual .persistent-deps \
 # ensure www user exists
 RUN set -x \
 	&& addgroup -g $GROUP_ID -S $USERNAME \
-	&& adduser -u $USER_ID -D -S -G $GROUPNAME $USERNAME
+	&& adduser -u $USER_ID -s /bin/sh -D -S -G $GROUPNAME $USERNAME
 
 
 RUN mkdir -p $PHP_INI_DIR/conf.d
