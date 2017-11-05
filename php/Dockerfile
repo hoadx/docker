@@ -43,6 +43,7 @@ RUN apk add --no-cache --virtual .persistent-deps \
 		icu \
 		libpng \
 		libjpeg-turbo \
+		libxml2 \
 		freetype \
 		git \
 		bash 
@@ -102,6 +103,7 @@ RUN set -xe \
 		libmcrypt-dev \
 		icu-dev \
 		libxslt-dev \
+		libxml2-dev \
 	\
 	&& export CFLAGS="$PHP_CFLAGS" \
 		CPPFLAGS="$PHP_CPPFLAGS" \
@@ -139,7 +141,7 @@ RUN set -xe \
 	&& apk add --no-cache --virtual .php-rundeps $runDeps \
 	\
 	&& docker-php-ext-configure gd         --with-freetype-dir=/usr         --with-png-dir=/usr         --with-jpeg-dir=/usr \
-	&& docker-php-ext-install mcrypt gd pdo_mysql intl xsl zip \
+	&& docker-php-ext-install mcrypt gd pdo_mysql intl soap xsl zip \
 	&& curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer  && chmod +x /usr/local/bin/composer \
 	\
 	&& apk del .build-deps \
