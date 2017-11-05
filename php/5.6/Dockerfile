@@ -37,7 +37,15 @@ RUN apk add --no-cache --virtual .persistent-deps \
 		curl \
 		tar \
 		xz \
-		openssl
+		openssl \
+		libmcrypt \
+		libxslt \
+		icu \
+		libpng \
+		libjpeg-turbo \
+		freetype \
+		git \
+		bash
 
 # ensure www user exists
 RUN set -x \
@@ -77,7 +85,7 @@ RUN set -xe; \
 	\
 	apk del .fetch-deps
 
-COPY docker-php-source /usr/local/bin/
+COPY docker-php-source docker-php-ext-* docker-entrypoint /usr/local/bin/
 
 RUN set -xe \
 	&& apk add --no-cache --virtual .build-deps \
@@ -88,6 +96,12 @@ RUN set -xe \
 		openssl-dev \
 		libxml2-dev \
 		sqlite-dev \
+		freetype-dev \
+		libjpeg-turbo-dev \
+		libpng-dev \
+		libmcrypt-dev \
+		icu-dev \
+		libxslt-dev \
 	\
 	&& export CFLAGS="$PHP_CFLAGS" \
 		CPPFLAGS="$PHP_CPPFLAGS" \
@@ -122,6 +136,9 @@ RUN set -xe \
 			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 	)" \
 	&& apk add --no-cache --virtual .php-rundeps $runDeps \
+	&& docker-php-ext-configure gd --with-freetype-dir=/usr --with-png-dir=/usr --with-jpeg-dir=/usr \
+	&& docker-php-ext-install mcrypt gd pdo_mysql intl xsl zip \
+	&& curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer  && chmod +x /usr/local/bin/composer \
 	&& apk del .build-deps \
 	&& pecl update-channels \
 	&& rm -rf /tmp/pear ~/.pearrc
@@ -161,8 +178,6 @@ RUN set -ex \
 		echo '[www]'; \
 		echo 'listen = [::]:9000'; \
 	} | tee php-fpm.d/zz-docker.conf
-
-COPY docker-php-ext-* docker-entrypoint /usr/local/bin/
 
 ENTRYPOINT ["docker-entrypoint"]
 
