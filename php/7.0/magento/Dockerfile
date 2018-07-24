@@ -20,6 +20,10 @@ ENV PHPIZE_DEPS \
 		make \
 		pcre-dev \
 		pkgconf \
+		freetype \
+		libpng \
+		libjpeg-turbo \
+		icu \
 		re2c
 
 ENV PHP_INI_DIR /usr/local/etc/php
@@ -87,6 +91,12 @@ RUN set -xe \
 		openssl-dev \
 		libxml2-dev \
 		sqlite-dev \
+		icu-dev \
+		libxslt-dev \
+		libmcrypt-dev \
+		freetype-dev \
+		libpng-dev \
+		libjpeg-turbo-dev \
 	\
 	&& export CFLAGS="$PHP_CFLAGS" \
 		CPPFLAGS="$PHP_CPPFLAGS" \
@@ -122,7 +132,12 @@ RUN set -xe \
 			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 	)" \
 	&& apk add --no-cache --virtual .php-rundeps $runDeps \
-	&& docker-php-ext-configure gd --with-freetype-dir=/usr --with-png-dir=/usr --with-jpeg-dir=/usr \
+	&& apk add --no-cache  \
+	&& docker-php-ext-configure gd \
+		--with-gd \
+		--with-freetype-dir=/usr \
+		--with-png-dir=/usr \
+		--with-jpeg-dir=/usr \
 	&& docker-php-ext-install mcrypt gd pdo_mysql intl soap xsl zip \
 	&& curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer  && chmod +x /usr/local/bin/composer \
 	\
