@@ -76,7 +76,7 @@ RUN set -xe; \
 	\
 	apk del .fetch-deps
 
-COPY docker-php-source /usr/local/bin/
+COPY docker-php-source docker-php-ext-* /usr/local/bin/
 
 RUN set -xe \
 	&& apk add --no-cache --virtual .build-deps \
