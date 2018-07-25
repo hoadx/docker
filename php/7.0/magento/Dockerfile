@@ -18,12 +18,16 @@ ENV PHPIZE_DEPS \
 		gcc \
 		libc-dev \
 		make \
-		pcre-dev \
+		pcre \
 		pkgconf \
 		freetype \
 		libpng \
 		libjpeg-turbo \
 		icu \
+		libxslt \
+		libmcrypt \
+		libpng \
+		libjpeg-turbo \
 		re2c
 
 ENV PHP_INI_DIR /usr/local/etc/php
@@ -94,6 +98,7 @@ RUN set -xe \
 		icu-dev \
 		libxslt-dev \
 		libmcrypt-dev \
+		pcre-dev \
 		freetype-dev \
 		libpng-dev \
 		libjpeg-turbo-dev \
