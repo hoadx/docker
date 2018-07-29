@@ -9,7 +9,8 @@ ENV USER_ID=5353
 ENV GROUP_ID=5353
 ENV CHANGE_OWNER=0
 
-# persistent / runtime deps
+# dependencies required for running "phpize"
+# these get automatically installed and removed by "docker-php-ext-*" (unless they're already installed)
 ENV PHPIZE_DEPS \
 		autoconf \
 		dpkg-dev dpkg \
@@ -20,6 +21,14 @@ ENV PHPIZE_DEPS \
 		make \
 		pcre \
 		pkgconf \
+		re2c
+
+# persistent / runtime deps
+RUN apk add --no-cache --virtual .persistent-deps \
+		ca-certificates \
+		curl \
+		tar \
+		xz \
 		freetype \
 		libpng \
 		libjpeg-turbo \
@@ -28,7 +37,7 @@ ENV PHPIZE_DEPS \
 		libmcrypt \
 		libpng \
 		libjpeg-turbo \
-		re2c
+		openssl
 
 ENV PHP_INI_DIR /usr/local/etc/php
 ENV PHP_EXTRA_CONFIGURE_ARGS --enable-fpm --with-fpm-user=$USERNAME --with-fpm-group=$GROUPNAME
@@ -39,13 +48,6 @@ ENV GPG_KEYS 1A4E8B7277C42E53DBA9C7B9BCAA30EA9C0D5763
 ENV PHP_VERSION 7.0.4
 ENV PHP_URL="http://php.net/get/php-7.0.4.tar.xz/from/this/mirror" PHP_ASC_URL="http://php.net/distributions/php-7.0.4.tar.xz.asc"
 ENV PHP_SHA256="584e0e374e357a71b6e95175a2947d787453afc7f9ab7c55651c10491c4df532" PHP_MD5=""
-
-RUN apk add --no-cache --virtual .persistent-deps \
-		ca-certificates \
-		curl \
-		tar \
-		xz \
-		openssl
 
 # ensure www user exists
 RUN set -x \
